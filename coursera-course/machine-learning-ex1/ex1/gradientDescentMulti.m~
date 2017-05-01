@@ -22,9 +22,8 @@ for iter = 1:num_iters
     h_theta = theta' * X';
 
     for j = 1:n
-        theta_tmp(j) = theta(j) - (alpha/m) * sum( (h_theta(j) - y(j)) .* X(:,j));
+        theta_tmp(j) = theta(j) - (alpha/m) * sum( (h_theta(j) - y(j)) * X( )
     end
-    theta = theta_tmp;
 
 
     % ============================================================
