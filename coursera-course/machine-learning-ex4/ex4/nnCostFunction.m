@@ -62,22 +62,72 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% Make one-hot y vector
+y_vec = zeros(m, num_labels);
+for i = 1:length(y)
+    value = y(i);
+    y_vec(i, value) = 1;
+end
+
+% Feed forward
+Xz = [ones(m,1) X];
+
+a2 = sigmoid(Xz * Theta1');
+a2s = [ones(m, 1) a2];
+h = sigmoid(a2s * Theta2');
+
+% Compute cost
+J = 0;
+for i = 1:m
+    for k = 1:num_labels
+        J = J + ( (-y_vec(i, k) * log(h(i, k))) - (1 - y_vec(i, k)) * log(1 - h(i, k) ) );
+    end
+end
+J = J/m;
 
 
+% Compute regularization
+reg = 0;
+
+for j = 1:size(Theta1, 1)
+    for k = 2:size(Theta1, 2)
+        reg = reg + (Theta1(j, k) ^ 2);
+    end
+end
+
+for j = 1:size(Theta2, 1)
+    for k = 2:size(Theta2, 2)
+        reg = reg + (Theta2(j, k) ^ 2);
+    end
+end
+
+reg = (reg * lambda) / (2 * m);
+
+J = J + reg;
 
 
+% Backpropagation
 
+D1 = zeros(size(Theta1));
+D2 = zeros(size(Theta2));
 
+for i = 1:m
+    a1 = [1 X(i,:)];
+    z2 = a1 * Theta1';
+    a2 = sigmoid(z2);
+    a2 = [1 a2];
+    z3 = a2 * Theta2';
+    a3 = sigmoid(z3);
 
+    delta3 = a3 - y_vec(i,:);
+    delta2 = (Theta2(:, 2:end)' * delta3' .* sigmoidGradient(z2'))';
 
+    D1 = D1 + delta2' * a1;
+    D2 = D2 + delta3' * a2;
+end
 
-
-
-
-
-
-
-
+Theta1_grad = (D1 ./ m);
+Theta2_grad = (D2 ./ m);
 
 
 % -------------------------------------------------------------
