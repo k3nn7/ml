@@ -22,11 +22,29 @@ sigma = 0.3;
 %  Note: You can compute the prediction error using 
 %        mean(double(predictions ~= yval))
 %
+Ccandidates = [.01, .03, .1, .3, 1.3, 10, 30];
+SigmaCandidates = Ccandidates;
+BestC = .01;
+BestSigma = 0.1;
+error = inf;
+
+for C = Ccandidates
+    for Sigma = SigmaCandidates
+        model = svmTrain(X, y, C, @(x1, x2) gaussianKernel(x1, x2, Sigma));
+        Yval_predicted = svmPredict(model, Xval);
+        model_error = mean(double(Yval_predicted ~= yval));
+        if model_error < error
+            error = model_error;
+            BestC = C;
+            BestSigma = Sigma;
+        end
+    end
+end
 
 
 
-
-
+C = BestC;
+sigma = BestSigma;
 
 
 % =========================================================================
