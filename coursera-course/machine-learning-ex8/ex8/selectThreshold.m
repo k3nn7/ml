@@ -24,12 +24,22 @@ for epsilon = min(pval):stepsize:max(pval)
     %       of 0's and 1's of the outlier predictions
 
 
+    predicted_anomalies = find(pval < epsilon);
+    predicted_regular = find(pval >= epsilon);
+    
+    real_anomalies = find(yval == 1);
+    real_regular = find(yval == 0);
 
 
-
-
-
-
+    tp = size(intersect(predicted_anomalies, real_anomalies), 1);
+    
+    fp = size(intersect(predicted_anomalies, real_regular), 1);
+    fn = size(intersect(predicted_regular, real_anomalies), 1);
+    
+    precision = tp / (tp + fp);
+    recall = tp / (tp + fn);
+    
+    F1 = (2 * precision * recall) / (precision + recall);
 
 
 
