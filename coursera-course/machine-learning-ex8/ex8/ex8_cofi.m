@@ -33,6 +33,9 @@ load ('ex8_movies.mat');
 %  From the matrix, we can compute statistics like average rating.
 fprintf('Average rating for movie 1 (Toy Story): %f / 5\n\n', ...
         mean(Y(1, R(1, :))));
+    
+fprintf('Average rating for last movie): %f / 5\n\n', ...
+    mean(Y(end, R(end, :))));
 
 %  We can "visualize" the ratings matrix by plotting it with imagesc
 imagesc(Y);
